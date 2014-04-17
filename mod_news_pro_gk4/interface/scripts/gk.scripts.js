@@ -178,21 +178,49 @@ window.addEvent('domready', function() {
 			elm.getElements('.nspArt').each(function(art, i) {
 				var overlay = new Element('div', { 'class': 'nspHoverOverlay' });
 				var info = art.getElement('.nspInfo1');
-				var info2 = art.getElement('.nspInfo2'); 
+				var info2 = art.getElement('.nspInfo2');
+				// Retrieve the IMG tag
+				var image = art.getElement('.nspImage');
 				overlay.inject(art, 'bottom');
 				art.getElement('.nspText').inject(overlay, 'bottom');
 				var copy = art.getElement('.nspHeader').clone();
 				copy.inject(overlay, 'top');
-				info.inject(overlay, 'bottom');
-				info2.inject(overlay, 'top');
-				art.getElement('.nspHeader').inject(art.getElement('.nspImageWrapper'), 'bottom');
+				// Prevent script to crash, in case of undefined info and info2
+				if(info) {
+					info.inject(overlay, 'bottom');
+				}
+				if(info2) {
+					info2.inject(overlay, 'top');
+				}
+				// Retrieve the header H4 part
+				var header = art.getElement('.nspHeader');
+				header.inject(art.getElement('.nspImageWrapper'), 'bottom');
 				
 				art.addEvent('mouseenter', function() {
 					overlay.addClass('active');
+					if(image) {
+					    // Change the image, in order to make it watermark style
+					    image.set('style', '-webkit-transform: scale(1.15) rotate(-1.5deg); -moz-transform: scale(1.15) rotate(-1.5deg); -ms-transform: scale(1.15) rotate(-1.5deg); -o-transform: scale(1.15) rotate(-1.5deg); transform: scale(1.15) rotate(-1.5deg); filter:alpha(opacity=30); opacity: 0.3; -moz-opacity:0.3;');
+					}
+				    // Remove the header H4 title
+				    header.set('style', 'visibility: hidden;');
 				});
 				
 				art.addEvent('mouseleave', function() {
 					overlay.removeClass('active');
+					if(image) {
+					    // Unset the image style
+					    image.set('style', '');
+					}
+				    // Display the header H4 title
+				    header.set('style', 'visibility: visible;');
+				});
+
+				// Make the image clickable, even when recovered by the details text
+				art.addEvent('click', function() {
+					if(image) {
+					    image.click();
+					}
 				});
 			});
 		}

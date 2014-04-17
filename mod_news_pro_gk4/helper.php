@@ -763,6 +763,9 @@ class NSP_GK4_Helper {
 			if($this->config['useScript'] == 1) {
 				$document->addScript($uri->root().'modules/mod_news_pro_gk4/interface/scripts/engine.js');
 			}
+// ARNAUD PATCH
+			$document->addScript($uri->root().'modules/mod_news_pro_gk4/interface/scripts/gk.scripts.js');
+// ARNAUD PATCH END
 			// init $headData variable
 			$headData = false;
 			// add scripts with automatic mode to document header
